@@ -1,0 +1,16 @@
+{
+  "localeCode": "en",
+  "authors": [
+    "hazre"
+  ],
+  "messages": {
+    "Settings.dev.hazre.resonitelinkplus": "ResoniteLinkPlus",
+    "Settings.dev.hazre.resonitelinkplus.Breadcrumb": "ResoniteLinkPlus",
+    "Settings.dev.hazre.resonitelinkplus.General.Enabled": "Enabled",
+    "Settings.dev.hazre.resonitelinkplus.General.Enabled.Description": "Enables the ResoniteLinkPlus functionality, requires a restart to take effect",
+    "Settings.dev.hazre.resonitelinkplus.General.LinkStartingPort": "Link Starting Port",
+    "Settings.dev.hazre.resonitelinkplus.General.LinkStartingPort.Description": "Resonite Link port starts from this number and increments up if the port is already in use",
+    "Settings.dev.hazre.resonitelinkplus.General.LinkAutoEnabledNewWorld": "Link Enabled for new worlds",
+    "Settings.dev.hazre.resonitelinkplus.General.LinkAutoEnabledNewWorld.Description": "Automatically enables ResoniteLink when creating a new world, Not recommended for public worlds"
+  }
+}
