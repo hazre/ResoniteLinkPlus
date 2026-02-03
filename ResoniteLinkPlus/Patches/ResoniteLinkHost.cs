@@ -1,72 +1,46 @@
-using System.Reflection;
-using HarmonyLib;
+using FrooxEngine;
+using MonoDetour;
+using MonoDetour.HookGen;
 
 namespace ResoniteLinkPlus;
 
-[HarmonyPatch]
-public class ResoniteLinkHostStartPatch
+[MonoDetourTargets(typeof(ResoniteLinkHost))]
+internal static class ResoniteLinkHostStartPatch
 {
-    static MethodBase? TargetMethod()
+    [MonoDetourHookInitialize]
+    static void Init()
     {
-        try
+        Md.FrooxEngine.ResoniteLinkHost.Start.Prefix(Prefix_Start);
+        Md.FrooxEngine.ResoniteLinkHost.Start.Postfix(Postfix_Start);
+    }
+    static void Prefix_Start(ResoniteLinkHost self, ref int? port)
+    {
+        if (!Plugin.Enabled.Value) return;
+
+        if (port == null)
         {
-            return LinkPlus.HostRef.Start;
+            int startingPort = Plugin.LinkStartingPort.Value;
+            int availablePort = LinkPlus.GetAvailablePort(startingPort);
+            port = availablePort;
+
+            Plugin.Log.LogInfo($"World '{self.World.Name}': No port specified, assigned port {availablePort}");
         }
-        catch (Exception ex)
-        {
-            Plugin.Log.LogError($"Exception in TargetMethod: {ex}");
-            return null;
-        }
+
+        return;
     }
 
-    static bool Prefix(object __instance, ref int? port)
+    static void Postfix_Start(ResoniteLinkHost self, ref int? port, ref bool returnValue)
     {
-        try
+        if (returnValue)
         {
-            if (!Plugin.Enabled.Value) return true;
-
-            string worldName = LinkPlus.GetWorldName(__instance);
-
-            if (port == null)
+            if (self?.Port != null)
             {
-                int startingPort = Plugin.LinkStartingPort.Value;
-                int availablePort = LinkPlus.GetAvailablePort(startingPort);
-                port = availablePort;
-
-                Plugin.Log.LogInfo($"World '{worldName}': No port specified. Assigned available port: {availablePort}");
-            }
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Plugin.Log.LogDebug($"Exception in Prefix: {ex}");
-            return true;
-        }
-    }
-
-    static void Postfix(object __instance, int? port, bool __result)
-    {
-        try
-        {
-            string worldName = LinkPlus.GetWorldName(__instance);
-
-            if (__result)
-            {
-                if (LinkPlus.HostRef.Port != null)
-                {
-                    int actualPort = (int)LinkPlus.HostRef.Port.GetValue(__instance)!;
-                    Plugin.Log.LogInfo($"World '{worldName}': ResoniteLink port set to: {actualPort}");
-                }
-            }
-            else
-            {
-                Plugin.Log.LogWarning($"World '{worldName}': failed to set ResoniteLink port to: {port}");
+                Plugin.Log.LogInfo($"World '{self.World.Name}': ResoniteLink port set to {self.Port}");
             }
         }
-        catch (Exception ex)
+        else
         {
-            Plugin.Log.LogWarning($"Exception in Postfix: {ex}");
+            Plugin.Log.LogWarning($"World '{self.World.Name}': Failed to set ResoniteLink port to {port}");
         }
     }
 }
