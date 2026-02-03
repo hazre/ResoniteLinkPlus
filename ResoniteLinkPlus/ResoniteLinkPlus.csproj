@@ -42,6 +42,7 @@
 
   <ItemGroup Condition="Exists('$(GamePath)')">
     <Reference Include="FrooxEngine" HintPath="$(GamePath)FrooxEngine.dll" Private="false" />
+    <Reference Include="FrooxEngine.Store" HintPath="$(GamePath)FrooxEngine.Store.dll" Private="false" />
     <Reference Include="Elements.Core" HintPath="$(GamePath)Elements.Core.dll" Private="false" />
     <Reference Include="Elements.Data" HintPath="$(GamePath)Elements.Data.dll" Private="false" />
     <Reference Include="Elements.Assets" HintPath="$(GamePath)Elements.Assets.dll" Private="false" />
