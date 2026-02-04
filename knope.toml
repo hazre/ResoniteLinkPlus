@@ -1,24 +1,27 @@
+[changes]
+ignore_conventional_commits = true
+
 [package]
 versioned_files = [
-    { path = "ResoniteLinkPlus/ResoniteLinkPlus.csproj", regex = '<Version>(?<version>\d+\.\d+\.\d+)</Version>' },
+  { path = "ResoniteLinkPlus/ResoniteLinkPlus.csproj", regex = '<Version>(?<version>\d+\.\d+\.\d+)</Version>' },
 ]
 changelog = "CHANGELOG.md"
 assets = "build/*.zip"
 extra_changelog_sections = [
-    { types = [
-        "major",
-    ], name = "Breaking Changes" },
-    { types = [
-        "minor",
-    ], name = "Added" },
-    { types = [
-        "patch",
-    ], name = "Improvements" },
-    { name = "Notes", footers = [
-        "Changelog-Note",
-    ], types = [
-        "note",
-    ] },
+  { types = [
+    "major",
+  ], name = "Breaking Changes" },
+  { types = [
+    "minor",
+  ], name = "Added" },
+  { types = [
+    "patch",
+  ], name = "Improvements" },
+  { name = "Notes", footers = [
+    "Changelog-Note",
+  ], types = [
+    "note",
+  ] },
 ]
 
 [[workflows]]
@@ -30,7 +33,6 @@ command = "git switch -c release"
 
 [[workflows.steps]]
 type = "PrepareRelease"
-ignore_conventional_commits = true
 
 [[workflows.steps]]
 type = "Command"
