@@ -29,7 +29,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="!Exists('$(GamePath)')">
-    <PackageReference Include="Resonite.GameLibs" Version="2026.*" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Resonite.GameLibs" Version="*" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@ internal static class WorldPatches
         Md.FrooxEngine.World.Destroy.Prefix(Prefix_Destroy);
     }
 
-    static void Postfix_StartSession(ref WorldManager manager, ref WorldAction init, ref ushort port, ref string forceSessionId, ref DataTreeNode load, ref Record record, ref bool unsafeMode, ref IEnumerable<AssemblyTypeRegistry> assemblies, ref World returnValue)
+    static void Postfix_StartSession(ref WorldManager manager, ref WorldAction init, ref Dictionary<string, ushort> ports, ref string forceSessionId, ref DataTreeNode load, ref Record record, ref bool unsafeMode, ref IEnumerable<AssemblyTypeRegistry> assemblies, ref World returnValue)
     {
         if (!Plugin.Enabled.Value || returnValue == null) return;
 
