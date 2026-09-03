@@ -27,7 +27,11 @@
     plugin into $(BepInExPath)plugins\$(AssemblyName).
   -->
   <Target Name="CopyToPlugins" AfterTargets="PostBuildEvent" Condition="'$(CopyToPlugins)' == 'true' and '$(BepInExPath)' != ''">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BepInExPath)plugins\$(AssemblyName)" />
+    <ItemGroup>
+      <PluginFiles Include="$(TargetPath)" />
+      <PluginFiles Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(BepInExPath)plugins\$(AssemblyName)" />
     <Message Text="Copied plugin to $(BepInExPath)plugins\$(AssemblyName)" Importance="high" />
   </Target>
 </Project>

@@ -21,10 +21,10 @@
 
     <BepInExPath Condition="'$(BepInExPath)' != ''">$(BepInExPath)/</BepInExPath>
     <BepInExPath Condition="Exists('$(GamePath)')">$(GamePath)BepInEx/</BepInExPath>
+    <BepInExPath Condition="Exists('$(APPDATA)\r2modmanPlus-local\Resonite\profiles\Default\BepInEx')">$(APPDATA)\r2modmanPlus-local\Resonite\profiles\Default\BepInEx\</BepInExPath>
+    <BepInExPath Condition="Exists('$(XDG_CONFIG_HOME)/r2modmanPlus-local/Resonite/profiles/Default/BepInEx')">$(XDG_CONFIG_HOME)/r2modmanPlus-local/Resonite/profiles/Default/BepInEx/</BepInExPath>
     <BepInExPath Condition="Exists('$(APPDATA)\com.kesomannen.gale\resonite\profiles\Default\BepInEx\')">$(APPDATA)\com.kesomannen.gale\resonite\profiles\Default\BepInEx\</BepInExPath>
     <BepInExPath Condition="Exists('$(XDG_DATA_HOME)/com.kesomannen.gale/resonite/profiles/Default/BepInEx/')">$(XDG_DATA_HOME)/com.kesomannen.gale/resonite/profiles/Default/BepInEx/</BepInExPath>
-    <BepInExPath Condition="Exists('$(APPDATA)\r2modmanPlus-local\Resonite\profiles\Default\BepInEx')">$(APPDATA)\r2modmanPlus-local\Resonite\profiles\Default\BepInEx</BepInExPath>
-    <BepInExPath Condition="Exists('$(XDG_CONFIG_HOME)/r2modmanPlus-local/Resonite/profiles/Default/BepInEx')">$(XDG_CONFIG_HOME)/r2modmanPlus-local/Resonite/profiles/Default/BepInEx</BepInExPath>
   </PropertyGroup>
 
 </Project>
