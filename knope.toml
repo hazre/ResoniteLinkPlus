@@ -68,6 +68,19 @@ name = "document-change"
 [[workflows.steps]]
 type = "CreateChangeFile"
 
+[[workflows]]
+name = "prepare-release-local"
+
+[[workflows.steps]]
+type = "PrepareRelease"
+
 [github]
 owner = "hazre"
 repo = "ResoniteLinkPlus"
+
+[release_notes]
+change_templates = [
+    "* $summary by @$pr_author_login in #$pr_number",
+    "* $summary by @$pr_author_login",
+    "* $summary",
+]

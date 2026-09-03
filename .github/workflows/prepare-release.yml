@@ -21,31 +21,37 @@ jobs:
 
       - uses: fregante/setup-git-user@024bc0b8e177d7e77203b48dab6fb45666854b35 # v2.0.2
 
-      - uses: ./.github/actions/collect-build-info
-        id: info
-
-      - uses: knope-dev/action@407e9ef7c272d2dd53a4e71e39a7839e29933c48 # v2.1.0
-        with:
-          version: 0.22.1
+      - uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
 
       - name: Prepare Release
         id: knope
-        shell: nu {0}
+        shell: bash
         run: |
-          let version = "${{ steps.info.outputs.version }}"
-          let has_tag = (git tag -l "v1.0.0" | str trim) == "v1.0.0"
-          let needs_override = $version == "1.0.0" and not $has_tag
+          version="$(grep -oPm1 '<Version>\K[^<]+' ResoniteLinkPlus/ResoniteLinkPlus.csproj | tr -d '\r\n ')"
+          has_tag="$(git tag -l "v$version" | head -1)"
 
-          let result = if $needs_override {
-            do -i { knope prepare-release --verbose --override-version 1.0.0 } | complete
-          } else {
-            do -i { knope prepare-release --verbose } | complete
-          }
-          if $result.exit_code == 0 {
-            "released=true\n" | save -a --raw $env.GITHUB_OUTPUT
-          } else {
-            "released=false\n" | save -a --raw $env.GITHUB_OUTPUT
-          }
+          log_file="$(mktemp)"
+          set +e
+          if [ -n "$has_tag" ]; then
+            knope prepare-release --verbose >"$log_file" 2>&1
+          else
+            knope prepare-release --verbose --override-version "$version" >"$log_file" 2>&1
+          fi
+          status=$?
+          set -e
+          cat "$log_file"
+
+          if [ "$status" -eq 0 ]; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if grep -qE 'No packages are ready to release|releases::no_release' "$log_file"; then
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          exit "$status"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
@@ -67,10 +73,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: ./.github/actions/dotnet-build
-        id: setup
-        with:
-          build: "true"
+      - uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+
+      - name: Build and create Thunderstore package
+        id: build
+        run: mise run build
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f
@@ -81,18 +88,20 @@ jobs:
         id: upload
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: ResoniteLinkPlus-${{ steps.setup.outputs.version }}-preview
+          name: ResoniteLinkPlus-${{ steps.build.outputs.version }}-preview
           path: ./build/*.zip
 
       - name: Update PR Body
-        shell: nu {0}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.build.outputs.version }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
         run: |
-          let current_body = gh pr view release --json body -q '.body'
-          let new_body = $"($current_body)
+          current_body=$(gh pr view release --json body -q '.body')
+          new_body="$current_body
 
           ## Preview Build
 
-          [Download ResoniteLinkPlus-${{ steps.setup.outputs.version }}-preview]\(${{ steps.upload.outputs.artifact-url }})"
-          gh pr edit release --body $new_body
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          [Download ResoniteLinkPlus-${VERSION}-preview]($ARTIFACT_URL)"
+          gh pr edit release --body "$new_body"

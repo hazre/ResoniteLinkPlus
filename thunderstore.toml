@@ -27,11 +27,6 @@ outdir = "./build"
 source = "./ResoniteLinkPlus/bin/Release/ResoniteLinkPlus.dll"
 target = "plugins/ResoniteLinkPlus/"
 
-# Include the PDB file for better debugging support
-[[build.copy]]
-source = "./ResoniteLinkPlus/bin/Release/ResoniteLinkPlus.pdb"
-target = "plugins/ResoniteLinkPlus/"
-
 # Include locale files
 [[build.copy]]
 source = "./ResoniteLinkPlus/Locale"

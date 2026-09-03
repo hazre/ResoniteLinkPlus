@@ -21,18 +21,15 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: ./.github/actions/dotnet-build
-        with:
-          build: "true"
+      - uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+
+      - name: Build and create Thunderstore package
+        run: mise run build
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f
         with:
           subject-path: './build/*.zip'
-
-      - uses: knope-dev/action@407e9ef7c272d2dd53a4e71e39a7839e29933c48 # v2.1.0
-        with:
-          version: 0.22.1
 
       - name: Create Release
         run: knope release --verbose
@@ -40,9 +37,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to Thunderstore
-        shell: nu {0}
+        shell: bash
         run: |
-          let zip_file = ls ./build/*.zip | get name.0
-          dotnet tcli publish --file $zip_file
+          ZIP_FILE=$(ls ./build/*.zip | head -1)
+          dotnet tcli publish --file "$ZIP_FILE"
         env:
           TCLI_AUTH_TOKEN: ${{ secrets.TCLI_AUTH_TOKEN }}

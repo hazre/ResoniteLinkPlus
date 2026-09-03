@@ -17,4 +17,17 @@
     <Exec Command="dotnet tool restore" WorkingDirectory="$(SolutionDir)" />
     <Exec Command="dotnet tcli $(BuildArgument) --package-version $(Version)" WorkingDirectory="$(SolutionDir)" />
   </Target>
+
+  <Target Name="EmitVersionToActions" AfterTargets="PackTS_Execute" Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <Exec Command="echo &quot;version=$(Version)&quot; >> $GITHUB_OUTPUT" />
+  </Target>
+
+  <!--
+    Dev-loop deploy: `dotnet build -p:CopyToPlugins=true` copies the built
+    plugin into $(BepInExPath)plugins\$(AssemblyName).
+  -->
+  <Target Name="CopyToPlugins" AfterTargets="PostBuildEvent" Condition="'$(CopyToPlugins)' == 'true' and '$(BepInExPath)' != ''">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BepInExPath)plugins\$(AssemblyName)" />
+    <Message Text="Copied plugin to $(BepInExPath)plugins\$(AssemblyName)" Importance="high" />
+  </Target>
 </Project>
