@@ -1,5 +1,12 @@
+<p align="center">
+    <img src="https://raw.githubusercontent.com/hazre/ResoniteLinkPlus/main/icon.png">
+</p>
+
 # ResoniteLinkPlus
-[![Thunderstore Badge](https://modding.resonite.net/assets/available-on-thunderstore.svg)](https://thunderstore.io/c/resonite/)
+[![Thunderstore Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fthunderstore.io%2Fapi%2Fexperimental%2Fpackage%2Fhazre%2FResoniteLinkPlus%2F&query=%24.latest.version_number&label=Thunderstore&style=flat&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/resonite/p/hazre/ResoniteLinkPlus/)
+[![Thunderstore Downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fthunderstore.io%2Fapi%2Fv1%2Fpackage-metrics%2Fhazre%2FResoniteLinkPlus%2F&query=%24.downloads&label=downloads&style=flat&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/resonite/p/hazre/ResoniteLinkPlus/)
+[![Build](https://img.shields.io/github/actions/workflow/status/hazre/ResoniteLinkPlus/build.yml?style=flat&logo=github)](https://github.com/hazre/ResoniteLinkPlus/actions/workflows/build.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](#license)
 
 A [Resonite](https://resonite.com/) mod that enhances ResoniteLink functionality.
 
