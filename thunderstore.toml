@@ -15,7 +15,7 @@ containsNsfwContent = false
 [package.dependencies]
 ResoniteModding-BepisLoader = "1.6.0"
 ResoniteModding-BepisLocaleLoader = "1.2.0"
-MonoDetour-MonoDetour_BepInEx_6 = "0.7.10"
+MonoDetour-MonoDetour_BepInEx_6 = "0.7.16"
 
 [build]
 icon = "./icon.png"
